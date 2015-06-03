@@ -100,7 +100,7 @@ public class MealManager {
         // Check date
         boolean validDate = false;
         long timestamp = 0;
-        Set<String> mealDateCache = mPreferences.mealJsonCache().get();
+        Set<String> mealDateCache = mPreferences.mealDateCache().get();
         if(mealDateCache == null || mealDateCache.size() == 0) return meals;
         for(String entry : mealDateCache) {
             if(entry.startsWith(cafeteriaId + "=")) {
