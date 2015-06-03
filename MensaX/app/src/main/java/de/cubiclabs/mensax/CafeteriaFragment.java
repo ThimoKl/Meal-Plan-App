@@ -7,11 +7,16 @@ import android.view.ViewGroup;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.List;
+
+import de.cubiclabs.mensax.models.Meal;
 import de.cubiclabs.mensax.util.Events;
+import de.greenrobot.event.EventBus;
 
 @EFragment(R.layout.fragment_cafeteria)
 public class CafeteriaFragment extends Fragment {
@@ -34,16 +39,20 @@ public class CafeteriaFragment extends Fragment {
     @ViewById
     protected ViewGroup mContentWrapper;
 
+    private List<Meal> mMeals;
+
     private enum ViewState {
         LOADING, ERROR, SUCCESS
     }
 
     @AfterViews
     protected void afterViewsInjected() {
+        EventBus.getDefault().register(this);
         load();
     }
 
-    public void onClick_reloadFromErrorState(View v) {
+    @Click(R.id.mErrorWrapper)
+    public void onErrorMessageClicked(View v) {
         load();
     }
 
@@ -80,5 +89,9 @@ public class CafeteriaFragment extends Fragment {
         }
     }
 
-
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroyView();
+    }
 }

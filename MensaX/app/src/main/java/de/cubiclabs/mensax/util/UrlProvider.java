@@ -17,6 +17,7 @@ public class UrlProvider {
     }
 
     public String getMealUrl(int cafeteriaId) {
-        return BASE_URL + Config.CAFETERIA_URL_NAME + "/api.php?action=getMeals&cid=" + cafeteriaId;
+        //return BASE_URL + Config.CAFETERIA_URL_NAME + "/api.php?action=getMeals&format=json&cid=" + cafeteriaId;
+        return BASE_URL + Config.CAFETERIA_URL_NAME + "/" + cafeteriaId + ".json";
     }
 }

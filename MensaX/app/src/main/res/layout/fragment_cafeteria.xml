@@ -23,8 +23,7 @@
         android:orientation="vertical"
         android:visibility="gone"
         android:clickable="true"
-        android:gravity="center"
-        android:onClick="onClick_reloadFromErrorState">
+        android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
