@@ -3,6 +3,7 @@ package de.cubiclabs.mensax.util;
 import java.util.List;
 
 import de.cubiclabs.mensax.models.Cafeteria;
+import de.cubiclabs.mensax.models.Day;
 import de.cubiclabs.mensax.models.Meal;
 
 /**
@@ -30,11 +31,11 @@ public class Events {
     }
 
     public static class MealsDownloadedEvent {
-        public List<Meal> mMeals;
+        public List<Day> mDays;
         public int mCafeteriaId;
-        public MealsDownloadedEvent(int cafeteriaId, List<Meal> meals) {
+        public MealsDownloadedEvent(int cafeteriaId, List<Day> days) {
             mCafeteriaId = cafeteriaId;
-            mMeals = meals;
+            mDays = days;
         }
     }
 

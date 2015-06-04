@@ -20,7 +20,9 @@ import java.util.List;
 import java.util.Set;
 
 import de.cubiclabs.mensax.models.Cafeteria;
+import de.cubiclabs.mensax.models.Day;
 import de.cubiclabs.mensax.models.Meal;
+import de.cubiclabs.mensax.parser.CafeteriaDOMParser;
 import de.cubiclabs.mensax.util.Events;
 import de.cubiclabs.mensax.util.UrlProvider;
 import de.cubiclabs.mensax.util.Preferences_;
@@ -42,9 +44,10 @@ public class MealManager {
 
     private static final long CACHE_EXPIRATION = 1 * 24 * 60 * 60 * 1000;
 
+    @Background
     public void request(int cafeteriaId) {
         // Use cache first, but download anyways
-        List<Meal> cache = fromCache(cafeteriaId);
+        List<Day> cache = fromCache(cafeteriaId);
         boolean didSendCache = false;
         if(cache != null && cache.size() != 0) {
             EventBus.getDefault().post(new Events.MealsDownloadedEvent(cafeteriaId, cache));
@@ -56,8 +59,8 @@ public class MealManager {
 
     @Background
     protected void download(int cafeteriaId, boolean didSendCache) {
-        List<Meal> meals= new ArrayList<Meal>();
-        String json = "";
+        List<Day> days= new ArrayList<Day>();
+        String xml = "";
         try {
             Request request = new Request.Builder()
                     .url(mUrlProvider.getMealUrl(cafeteriaId))
@@ -71,11 +74,13 @@ public class MealManager {
                 return;
             }
 
-            json = response.body().string();
+            // Parse
+            CafeteriaDOMParser parser = new CafeteriaDOMParser();
+            days = parser.parse(response.body().byteStream());
 
-            Type listType = new TypeToken<ArrayList<Meal>>() {}.getType();
-            Gson gson = new Gson();
-            meals = (ArrayList<Meal>)gson.fromJson(json, listType);
+            //Type listType = new TypeToken<ArrayList<Meal>>() {}.getType();
+            //Gson gson = new Gson();
+            //meals = (ArrayList<Meal>)gson.fromJson(json, listType);
         } catch (Exception e) {
             if(!didSendCache) {
                 EventBus.getDefault().post(new Events.MealDownloadFailedEvent(cafeteriaId));
@@ -83,25 +88,25 @@ public class MealManager {
             return;
         }
 
-        if(meals == null || meals.size() == 0) {
+        if(days == null || days.size() == 0) {
             if(!didSendCache) {
                 EventBus.getDefault().post(new Events.MealDownloadFailedEvent(cafeteriaId));
             }
             return;
         }
 
-        updateCache(cafeteriaId, meals);
-        EventBus.getDefault().post(new Events.MealsDownloadedEvent(cafeteriaId, meals));
+        updateCache(cafeteriaId, days);
+        EventBus.getDefault().post(new Events.MealsDownloadedEvent(cafeteriaId, days));
     }
 
-    private List<Meal> fromCache(int cafeteriaId) {
-        List<Meal> meals = new ArrayList<Meal>();
+    private List<Day> fromCache(int cafeteriaId) {
+        List<Day> days = new ArrayList<Day>();
 
         // Check date
         boolean validDate = false;
         long timestamp = 0;
         Set<String> mealDateCache = mPreferences.mealDateCache().get();
-        if(mealDateCache == null || mealDateCache.size() == 0) return meals;
+        if(mealDateCache == null || mealDateCache.size() == 0) return days;
         for(String entry : mealDateCache) {
             if(entry.startsWith(cafeteriaId + "=")) {
                 String content = entry.substring(entry.indexOf("=")+1);
@@ -116,29 +121,29 @@ public class MealManager {
             }
         }
 
-        if(!validDate) return meals;
+        if(!validDate) return days;
 
         // Check json
         Set<String> mealJsonCache = mPreferences.mealJsonCache().get();
-        if(mealJsonCache == null || mealJsonCache.size() == 0) return meals;
+        if(mealJsonCache == null || mealJsonCache.size() == 0) return days;
         for(String entry : mealJsonCache) {
             if(entry.startsWith(cafeteriaId + "=")) {
                 String json = entry.substring(entry.indexOf("=")+1);
 
                 try {
-                    Type listType = new TypeToken<ArrayList<Meal>>() {}.getType();
+                    Type listType = new TypeToken<ArrayList<Day>>() {}.getType();
                     Gson gson = new Gson();
-                    meals = (ArrayList<Meal>)gson.fromJson(json, listType);
+                    days = (ArrayList<Day>)gson.fromJson(json, listType);
                 } catch(Exception e) {
                 }
                 break;
             }
         }
 
-        return meals;
+        return days;
     }
 
-    private void updateCache(int cafeteriaId, List<Meal> meals) {
+    private void updateCache(int cafeteriaId, List<Day> days) {
         // Remove possible old entry
         Set<String> mealDateCache = mPreferences.mealDateCache().get();
         Set<String> mealJsonCache = mPreferences.mealJsonCache().get();
@@ -163,8 +168,10 @@ public class MealManager {
 
         // Add new entry
         Gson gson = new Gson();
+        Type listType = new TypeToken<ArrayList<Day>>() {}.getType();
+        String json = gson.toJson(days, listType);
         mealDateCache.add(cafeteriaId + "=" + String.valueOf((new Date()).getTime()));
-        mealJsonCache.add(cafeteriaId + "=" + gson.toJson(meals));
+        mealJsonCache.add(cafeteriaId + "=" + json);
 
         mPreferences.edit()
                 .mealDateCache()
