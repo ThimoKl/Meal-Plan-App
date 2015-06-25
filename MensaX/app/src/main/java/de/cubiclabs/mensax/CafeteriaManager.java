@@ -10,6 +10,7 @@ import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EBean;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.lang.reflect.Type;
@@ -125,6 +126,7 @@ public class CafeteriaManager {
         return list;
     }
 
+    @UiThread
     protected void sendFailedEvent() {
         EventBus.getDefault().post(new Events.CafeteriaDownloadFailedEvent());
     }

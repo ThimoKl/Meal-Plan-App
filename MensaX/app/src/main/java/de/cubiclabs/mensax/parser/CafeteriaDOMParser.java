@@ -21,6 +21,7 @@ import org.w3c.dom.NodeList;
 
 import de.cubiclabs.mensax.models.Day;
 import de.cubiclabs.mensax.models.Meal;
+import de.cubiclabs.mensax.util.CryptoUtils;
 
 public class CafeteriaDOMParser {
 	
@@ -65,7 +66,8 @@ public class CafeteriaDOMParser {
                     meal.cafeteria = Integer.parseInt(getValue(mealNode, "cafeteria"));
                     meal.like = Integer.parseInt(getValue(mealNode, "like"));
                     meal.dislike = Integer.parseInt(getValue(mealNode, "dislike"));
-                    if(meal.name.length() > 0) day.add(meal);
+                    meal.uid = CryptoUtils.md5(meal.category.toLowerCase(Locale.GERMAN) + meal.name.toLowerCase(Locale.GERMAN));
+                    if(meal.name.length() > 0) day.mMeals.add(meal);
                 } catch (Exception e) {}
             }
             days.add(day);
@@ -98,4 +100,5 @@ public class CafeteriaDOMParser {
         }
         return "";
     }
+
 }

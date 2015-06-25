@@ -23,17 +23,13 @@ import java.util.List;
 import de.cubiclabs.mensax.models.Day;
 import de.cubiclabs.mensax.models.Meal;
 import de.cubiclabs.mensax.util.Events;
-import de.cubiclabs.mensax.views.CustomExpandCard;
 import de.cubiclabs.mensax.views.EmptyCard;
 import de.cubiclabs.mensax.views.MealCard;
 import de.greenrobot.event.EventBus;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
-import it.gmariotti.cardslib.library.internal.CardGridArrayAdapter;
-import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.prototypes.CardSection;
 import it.gmariotti.cardslib.library.prototypes.SectionedCardAdapter;
-import it.gmariotti.cardslib.library.view.CardGridView;
 import it.gmariotti.cardslib.library.view.CardListView;
 
 @EFragment(R.layout.fragment_cafeteria)
@@ -47,6 +43,9 @@ public class CafeteriaFragment extends Fragment {
 
     @FragmentArg
     protected String mCafeteriaName;
+
+    @FragmentArg
+    protected String mCafeteriaRatingUid;
 
     @ViewById
     protected ViewGroup mErrorWrapper;
@@ -76,7 +75,7 @@ public class CafeteriaFragment extends Fragment {
 
     private void load() {
         changeViewState(ViewState.LOADING);
-        mMealManager.request(mCafeteriaId);
+        mMealManager.request(mCafeteriaId, mCafeteriaRatingUid);
     }
 
     public void onEventMainThread(Events.MealDownloadFailedEvent event) {
@@ -111,22 +110,23 @@ public class CafeteriaFragment extends Fragment {
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
+        mMealManager.close();
         super.onDestroyView();
     }
 
     private void showMeals(List<Day> days) {
         List<Card> cards = new ArrayList<Card>();
         for(Day day : days) {
-            if(day.size() == 0) {
+            if(day.mMeals.size() == 0) {
                 cards.add(new EmptyCard(getActivity().getBaseContext()));
             }
-            for (Meal meal : day) {
-                Card card = new MealCard(getActivity().getBaseContext(), meal);
+            for (Meal meal : day.mMeals) {
+                Card card = new MealCard(getActivity().getBaseContext(), meal, mCafeteriaId, mCafeteriaRatingUid);
                 cards.add(card);
             }
         }
 
-        CardArrayAdapter cardArrayAdapter = new CardArrayAdapter(getActivity(),cards);
+        CardArrayAdapter cardArrayAdapter = new CardArrayAdapter(getActivity(), cards);
 
         // Sections code.
         // Add the card sections
@@ -147,12 +147,12 @@ public class CafeteriaFragment extends Fragment {
                 todayFound = true;
             }
 
-            if(day.size() == 0) {
+            if(day.mMeals.size() == 0) {
                 mealCount++;
                 if(!todayFound) itemCountTillSelectedDate++;
             }
 
-            for (Meal meal : day) {
+            for (Meal meal : day.mMeals) {
                 mealCount++;
                 if(!todayFound) itemCountTillSelectedDate++;
 
@@ -189,10 +189,6 @@ public class CafeteriaFragment extends Fragment {
 
         @Override
         protected View getSectionView(int position, View view, ViewGroup parent) {
-
-            //Override this method to customize your section's view
-
-            //Get the section
             CustomCardSection section = (CustomCardSection) getCardSections().get(position);
 
             if (section != null ) {

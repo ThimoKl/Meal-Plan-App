@@ -6,4 +6,5 @@ package de.cubiclabs.mensax.models;
 public class Cafeteria{
     public int id;
     public String name;
+    public String ratingUid;
 }

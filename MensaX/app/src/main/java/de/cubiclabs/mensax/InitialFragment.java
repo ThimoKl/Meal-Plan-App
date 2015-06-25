@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
 import de.cubiclabs.mensax.util.Events;
@@ -28,7 +30,7 @@ public class InitialFragment extends Fragment {
     @ViewById
     protected ViewGroup mLoadingWrapper;
 
-    private enum ViewState {
+    protected enum ViewState {
         LOADING, ERROR, SUCCESS
     }
 
@@ -53,12 +55,14 @@ public class InitialFragment extends Fragment {
         changeViewState(ViewState.ERROR);
     }
 
-    public void onClick_reloadFromErrorState(View v) {
+    @Click(R.id.mErrorWrapper)
+    public void onErrorMessageClicked(View v) {
         changeViewState(ViewState.LOADING);
         mCafeteriaManager.request();
     }
 
-    private void changeViewState(ViewState state) {
+    @UiThread
+    protected void changeViewState(ViewState state) {
         switch (state) {
             case LOADING:
                 mErrorWrapper.setVisibility(View.GONE);

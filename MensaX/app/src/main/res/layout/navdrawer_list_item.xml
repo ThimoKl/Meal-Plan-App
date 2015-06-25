@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/text1"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+    android:gravity="center_vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:textColor="@drawable/navdrawer_item_color"
+    android:background="@drawable/navdrawer_item_background" />

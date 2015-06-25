@@ -23,6 +23,9 @@ public class Meal {
     public int cafeteria = 0;
     public int id = 0;
 
+    public Rating rating = null;
+    public String uid = "";
+
 	public Meal() {
 
 	}

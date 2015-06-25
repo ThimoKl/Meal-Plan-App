@@ -20,20 +20,27 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:padding="0dp"
-    android:layout_margin="0dp">
+    android:layout_height="wrap_content"
+    android:paddingTop="4dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingBottom="0dp"
+    android:layout_margin="0dp"
+    >
 
     <TextView
         android:id="@+id/carddemo_section_gplay_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/carddemo_section_textmore_padding_left"
-        android:paddingRight="@dimen/carddemo_section_textmore_padding_right"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginLeft="@dimen/carddemo_section_textmore_padding_left"
+        android:layout_marginRight="@dimen/carddemo_section_textmore_padding_right"
         android:paddingTop="@dimen/carddemo_section_textmore_padding_top"
         android:paddingBottom="@dimen/carddemo_section_textmore_padding_bottom"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textStyle="italic"
+        android:textColor="@color/white"
+        android:background="@color/red_transparent"
+        android:gravity="center_horizontal"
         />
 
 </RelativeLayout>

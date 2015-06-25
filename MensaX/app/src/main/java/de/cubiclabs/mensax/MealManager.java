@@ -19,9 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import de.cubiclabs.mensax.models.Cafeteria;
 import de.cubiclabs.mensax.models.Day;
-import de.cubiclabs.mensax.models.Meal;
 import de.cubiclabs.mensax.parser.CafeteriaDOMParser;
 import de.cubiclabs.mensax.util.Events;
 import de.cubiclabs.mensax.util.UrlProvider;
@@ -37,6 +35,9 @@ public class MealManager {
     @Bean
     protected UrlProvider mUrlProvider;
 
+    @Bean
+    protected RatingManager mRatingManager;
+
     @Pref
     protected Preferences_ mPreferences;
 
@@ -44,32 +45,49 @@ public class MealManager {
 
     private static final long CACHE_EXPIRATION = 1 * 24 * 60 * 60 * 1000;
 
+    private int mLastRequestedCafeteriaId = 0;
+
+    @AfterInject
+    public void afterInjected() {
+        EventBus.getDefault().register(this);
+    }
+
+    public void close() {
+        EventBus.getDefault().unregister(this);
+    }
+
     @Background
-    public void request(int cafeteriaId) {
+    public void request(int cafeteriaId, String cafeteriaRatingUid) {
+        mLastRequestedCafeteriaId = cafeteriaId;
+
         // Use cache first, but download anyways
         List<Day> cache = fromCache(cafeteriaId);
         boolean didSendCache = false;
         if(cache != null && cache.size() != 0) {
             EventBus.getDefault().post(new Events.MealsDownloadedEvent(cafeteriaId, cache));
             didSendCache = true;
+        } else {
+            cache = null;
         }
 
-        download(cafeteriaId, didSendCache);
+        download(cafeteriaId, cafeteriaRatingUid, cache);
     }
 
     @Background
-    protected void download(int cafeteriaId, boolean didSendCache) {
+    protected void download(int cafeteriaId, String cafeteriaRatingUid, List<Day> cache) {
         List<Day> days= new ArrayList<Day>();
         String xml = "";
         try {
             Request request = new Request.Builder()
-                    .url(mUrlProvider.getMealUrl(cafeteriaId))
+                    .url(mUrlProvider.getMealsUrl(cafeteriaId))
                     .build();
 
             Response response = mClient.newCall(request).execute();
             if (!response.isSuccessful()) {
-                if(!didSendCache) {
+                if(cache == null) {
                     EventBus.getDefault().post(new Events.MealDownloadFailedEvent(cafeteriaId));
+                } else {
+                    mRatingManager.getRatings(cafeteriaId, cafeteriaRatingUid, cache);
                 }
                 return;
             }
@@ -82,21 +100,26 @@ public class MealManager {
             //Gson gson = new Gson();
             //meals = (ArrayList<Meal>)gson.fromJson(json, listType);
         } catch (Exception e) {
-            if(!didSendCache) {
+            if(cache == null) {
                 EventBus.getDefault().post(new Events.MealDownloadFailedEvent(cafeteriaId));
+            } else {
+                mRatingManager.getRatings(cafeteriaId, cafeteriaRatingUid, cache);
             }
             return;
         }
 
         if(days == null || days.size() == 0) {
-            if(!didSendCache) {
+            if(cache == null) {
                 EventBus.getDefault().post(new Events.MealDownloadFailedEvent(cafeteriaId));
+            } else {
+                mRatingManager.getRatings(cafeteriaId, cafeteriaRatingUid, cache);
             }
             return;
         }
 
         updateCache(cafeteriaId, days);
         EventBus.getDefault().post(new Events.MealsDownloadedEvent(cafeteriaId, days));
+        mRatingManager.getRatings(cafeteriaId, cafeteriaRatingUid, days);
     }
 
     private List<Day> fromCache(int cafeteriaId) {
@@ -180,5 +203,12 @@ public class MealManager {
                 .put(mealJsonCache)
                 .apply();
 
+    }
+
+    public void onEvent(Events.RatingsDownloadedEvent event) {
+        if(mLastRequestedCafeteriaId != event.mCafeteriaId) return;
+        if(event.mDays == null || event.mDays.size() == 0) return;
+
+        EventBus.getDefault().post(new Events.MealsDownloadedEvent(event.mCafeteriaId, event.mDays));
     }
 }

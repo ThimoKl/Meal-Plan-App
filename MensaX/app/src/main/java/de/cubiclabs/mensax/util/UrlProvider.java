@@ -16,7 +16,7 @@ public class UrlProvider {
         return BASE_URL + Config.CAFETERIA_URL_NAME + "/cafeterias.json";
     }
 
-    public String getMealUrl(int cafeteriaId) {
+    public String getMealsUrl(int cafeteriaId) {
         return BASE_URL + Config.CAFETERIA_URL_NAME + "/api.php?action=getMeals&cid=" + cafeteriaId;
         //return BASE_URL + Config.CAFETERIA_URL_NAME + "/" + cafeteriaId + ".json";
     }
