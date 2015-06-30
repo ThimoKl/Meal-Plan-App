@@ -1,23 +1,18 @@
 <resources>
+    <!-- START CONFIG -->
     <string name="app_name">MensaX</string>
+    <string name="url_city">bonn</string>
+    <string name="source">www.studentenwerk-bonn.de</string>
+    <string name="ad_unit_id_inline">/14148428/ca-pub-3723428902598385/Test_Android_Smart</string>
+    <string name="ad_unit_id_bottom">/14148428/ca-pub-3723428902598385/Test_AndroidPhone</string>
+    <!-- END CONFIG -->
 
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+    <string name="navigation_drawer_open">Navigation öffnen</string>
+    <string name="navigation_drawer_close">Navigation schließen</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_example">Example action</string>
-
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_start">StartActivity</string>
-
-    <string name="hello_world">Hello world!</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_meals_today">Heute sind leider keine Gerichte verfügbar.</string>
+    <string name="error_open_play_store">Der Play Store konnte nicht geöffnet werden</string>
+    <string name="source_title">Datenquelle:</string>
+    <string name="rate_app">App bewerten</string>
+
 </resources>

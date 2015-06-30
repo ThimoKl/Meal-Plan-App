@@ -18,23 +18,22 @@
   ~  *****************************************************************************
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:paddingTop="4dp"
-    android:paddingLeft="0dp"
-    android:paddingRight="0dp"
-    android:paddingBottom="0dp"
-    android:layout_margin="0dp"
+    android:orientation="vertical"
     >
 
     <TextView
         android:id="@+id/carddemo_section_gplay_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_marginTop="?attr/actionBarSize"
-        android:layout_marginLeft="@dimen/carddemo_section_textmore_padding_left"
-        android:layout_marginRight="@dimen/carddemo_section_textmore_padding_right"
+        android:layout_marginLeft="@dimen/carddemo_list_padding"
+        android:layout_marginRight="@dimen/carddemo_list_padding"
         android:paddingTop="@dimen/carddemo_section_textmore_padding_top"
         android:paddingBottom="@dimen/carddemo_section_textmore_padding_bottom"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -43,4 +42,16 @@
         android:gravity="center_horizontal"
         />
 
-</RelativeLayout>
+    <com.google.android.gms.ads.doubleclick.PublisherAdView
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/carddemo_section_gplay_title"
+        android:layout_marginTop="4dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/ad_unit_id_inline" />
+
+</LinearLayout>

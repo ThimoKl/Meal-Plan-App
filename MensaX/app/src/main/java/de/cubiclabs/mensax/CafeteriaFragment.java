@@ -3,10 +3,18 @@ package de.cubiclabs.mensax;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.doubleclick.PublisherAdView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -108,6 +116,22 @@ public class CafeteriaFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        final AdView adView = (AdView) getView().findViewById(R.id.adView);
+        adView.setVisibility(View.GONE);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                adView.setVisibility(View.VISIBLE);
+                super.onAdLoaded();
+            }
+        });
+        super.onResume();
+    }
+
+    @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
         mMealManager.close();
@@ -171,6 +195,11 @@ public class CafeteriaFragment extends Fragment {
         CardListView listView = (CardListView) getActivity().findViewById(R.id.carddemo_list_expand);
         if (listView!=null){
             listView.setExternalAdapter(sectionAdapter, cardArrayAdapter);
+
+            if(listView.getFooterViewsCount() == 0) {
+                View footerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.cafeteria_list_view_footer, null, false);
+                listView.addFooterView(footerView);
+            }
         }
 
         if(todayFound) {
@@ -196,6 +225,19 @@ public class CafeteriaFragment extends Fragment {
                 TextView title = (TextView) view.findViewById(R.id.carddemo_section_gplay_title);
                 if (title != null)
                     title.setText(section.getTitle());
+
+                final PublisherAdView adView = (PublisherAdView) view.findViewById(R.id.adView);
+                PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
+                //adView.setAdSizes(AdSize.MEDIUM_RECTANGLE, AdSize.BANNER, AdSize.FULL_BANNER, AdSize.LARGE_BANNER, AdSize.LEADERBOARD);
+                adView.loadAd(adRequest);
+                adView.setVisibility(View.GONE);
+                adView.setAdListener(new AdListener() {
+                    @Override
+                    public void onAdLoaded() {
+                        adView.setVisibility(View.VISIBLE);
+                        super.onAdLoaded();
+                    }
+                });
 
             }
 

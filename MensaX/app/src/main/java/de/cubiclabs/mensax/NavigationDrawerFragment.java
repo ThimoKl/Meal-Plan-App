@@ -1,5 +1,8 @@
 package de.cubiclabs.mensax;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -12,14 +15,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.InstanceState;
+import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.util.List;
@@ -40,7 +46,7 @@ public class NavigationDrawerFragment extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
 
     private DrawerLayout mDrawerLayout;
-    private ListView mDrawerListView;
+    //private ListView mDrawerListView;
     private View mFragmentContainerView;
 
     @InstanceState
@@ -57,6 +63,19 @@ public class NavigationDrawerFragment extends Fragment {
 
     protected List<Cafeteria> mCafeterias;
 
+    @ViewById
+    protected ViewGroup mErrorWrapper;
+
+    @ViewById
+    protected ViewGroup mLoadingWrapper;
+
+    @ViewById
+    protected ListView mListView;
+
+    private enum ViewState {
+        LOADING, ERROR, SUCCESS
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -67,23 +86,58 @@ public class NavigationDrawerFragment extends Fragment {
     void afterViewsInjected() {
         EventBus.getDefault().register(this);
         mCafeteriaManager.request();
+        changeViewState(ViewState.LOADING);
     }
 
     public void onEventMainThread(Events.CafeteriasDownloadedEvent event) {
+        changeViewState(ViewState.SUCCESS);
         mCafeterias = event.mCafeterias;
+
+        if(getActivity() != null) {
+            Cafeteria rateMeObject = new Cafeteria();
+            rateMeObject.name = getActivity().getString(R.string.rate_app);
+            mCafeterias.add(rateMeObject);
+        }
         initListView();
     }
 
     public void onEventMainThread(Events.CafeteriaDownloadFailedEvent event) {
+        changeViewState(ViewState.ERROR);
+    }
 
+    private void changeViewState(ViewState state) {
+        switch (state) {
+            case LOADING:
+                mListView.setVisibility(View.GONE);
+                mErrorWrapper.setVisibility(View.GONE);
+                mLoadingWrapper.setVisibility(View.VISIBLE);
+                break;
+            case ERROR:
+                mListView.setVisibility(View.GONE);
+                mLoadingWrapper.setVisibility(View.GONE);
+                mErrorWrapper.setVisibility(View.VISIBLE);
+                break;
+            case SUCCESS:
+                mLoadingWrapper.setVisibility(View.GONE);
+                mErrorWrapper.setVisibility(View.GONE);
+                mListView.setVisibility(View.VISIBLE);
+
+        }
     }
 
     private void initListView() {
-        mDrawerListView = (ListView)getView();
-        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(position);
+                if(position == mCafeterias.size()-1) {
+                    launchMarket();
+                    // "Rate app" shall not be the active item. Use the current cafeteria
+                    if (mListView != null) {
+                        mListView.setItemChecked(mCurrentSelectedPosition, true);
+                    }
+                } else {
+                    selectItem(position);
+                }
             }
         });
 
@@ -92,12 +146,12 @@ public class NavigationDrawerFragment extends Fragment {
             cafTitles[i] = mCafeterias.get(i).name;
         }
 
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+        mListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 R.layout.navdrawer_list_item,
                 R.id.text1,
                 cafTitles));
-        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+        mListView.setItemChecked(mCurrentSelectedPosition, true);
         EventBus.getDefault().post(new Events.CafeteriaSelected(mCafeterias.get(mCurrentSelectedPosition)));
     }
 
@@ -178,8 +232,8 @@ public class NavigationDrawerFragment extends Fragment {
 
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
-        if (mDrawerListView != null) {
-            mDrawerListView.setItemChecked(position, true);
+        if (mListView != null) {
+            mListView.setItemChecked(position, true);
         }
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
@@ -225,6 +279,16 @@ public class NavigationDrawerFragment extends Fragment {
 
     private ActionBar getActionBar() {
         return ((ActionBarActivity) getActivity()).getSupportActionBar();
+    }
+
+    private void launchMarket() {
+        Uri uri = Uri.parse("market://details?id=" + getActivity().getPackageName());
+        Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        try {
+            startActivity(myAppLinkToMarket);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getActivity(), getActivity().getString(R.string.error_open_play_store), Toast.LENGTH_LONG).show();
+        }
     }
 
 }

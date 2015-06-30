@@ -32,8 +32,8 @@ android {
         applicationId "de.cubiclabs.mensax"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 400
+        versionName "4.0"
     }
     buildTypes {
         release {
@@ -56,4 +56,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:22.2.0'
     compile 'com.github.gabrielemariotti.cards:cardslib-core:2.1.0'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile 'com.google.android.gms:play-services-ads:7.5.0'
+
 }

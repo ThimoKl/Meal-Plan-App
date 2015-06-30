@@ -22,7 +22,9 @@
      You need to have in your layout a `CardView` with the ID `list_cardId` -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_height="wrap_content"
-              android:layout_width="match_parent">
+              android:layout_width="match_parent"
+    android:paddingLeft="@dimen/carddemo_list_padding"
+    android:paddingRight="@dimen/carddemo_list_padding">
 
     <it.gmariotti.cardslib.library.view.CardViewNative
         xmlns:android="http://schemas.android.com/apk/res/android"
