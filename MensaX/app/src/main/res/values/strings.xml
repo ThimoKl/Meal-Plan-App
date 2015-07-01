@@ -1,10 +1,13 @@
 <resources>
     <!-- START CONFIG -->
-    <string name="app_name">MensaX</string>
+    <string name="app_name">Mensa Bonn</string>
     <string name="url_city">bonn</string>
     <string name="source">www.studentenwerk-bonn.de</string>
-    <string name="ad_unit_id_inline">/14148428/ca-pub-3723428902598385/Test_Android_X</string>
-    <string name="ad_unit_id_bottom">/14148428/ca-pub-3723428902598385/Test_AndroidPhone</string>
+    <string name="ad_unit_id_inline">/14148428/ca-pub-3723428902598385/Phone_Android_Bonn_X</string>
+    <string name="ad_unit_id_bottom">/14148428/ca-pub-3723428902598385/Phone_Android_Bonn</string>
+
+    <!-- DON'T FORGET TO UPDATE THE PACKAGE NAME IN BUILD.GRADLE -->
+
     <!-- END CONFIG -->
 
     <string name="navigation_drawer_open">Navigation öffnen</string>

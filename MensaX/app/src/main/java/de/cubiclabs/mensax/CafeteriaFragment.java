@@ -129,13 +129,17 @@ public class CafeteriaFragment extends Fragment {
         adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                adView.setVisibility(View.VISIBLE);
-                mApplication.mTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Ads")
-                        .setAction(getString(R.string.app_name))
-                        .setLabel("filled")
-                        .setValue(1)
-                        .build());
+                try {
+                    adView.setVisibility(View.VISIBLE);
+                    mApplication.mTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Ads")
+                            .setAction(getString(R.string.app_name))
+                            .setLabel("filled")
+                            .setValue(1)
+                            .build());
+                } catch(Exception e) {
+
+                }
                 super.onAdLoaded();
             }
         });
@@ -263,15 +267,18 @@ public class CafeteriaFragment extends Fragment {
                 adView.setAdListener(new AdListener() {
                     @Override
                     public void onAdLoaded() {
-                        adView.setVisibility(View.VISIBLE);
+                        try {
+                            adView.setVisibility(View.VISIBLE);
 
-                        mApplication.mTracker.send(new HitBuilders.EventBuilder()
-                                .setCategory("Ads")
-                                .setAction(getString(R.string.app_name))
-                                .setLabel("filled")
-                                .setValue(1)
-                                .build());
+                            mApplication.mTracker.send(new HitBuilders.EventBuilder()
+                                    .setCategory("Ads")
+                                    .setAction(getString(R.string.app_name))
+                                    .setLabel("filled")
+                                    .setValue(1)
+                                    .build());
+                        } catch(Exception e) {
 
+                        }
                         super.onAdLoaded();
                     }
                 });
