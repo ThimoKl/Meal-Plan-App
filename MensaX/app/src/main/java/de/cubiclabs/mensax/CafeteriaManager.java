@@ -91,8 +91,8 @@ public class CafeteriaManager {
             Gson gson = new Gson();
             cafeterias = (ArrayList<Cafeteria>)gson.fromJson(json, listType);
         } catch (Exception e) {
-            sendFailedEvent();
-            return;
+            // Download failed. Use cache, even if it's expired.
+            cafeterias = fromCache();
         }
 
         if(cafeterias == null || cafeterias.size() == 0) {
