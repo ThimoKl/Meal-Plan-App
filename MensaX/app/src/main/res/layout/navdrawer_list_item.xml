@@ -1,13 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/text1"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:textAppearance="?android:attr/textAppearanceListItemSmall"
-    android:gravity="center_vertical"
+    android:orientation="horizontal"
     android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:textColor="@drawable/navdrawer_item_color"
-    android:background="@drawable/navdrawer_item_background" />
+    android:background="@drawable/navdrawer_item_background"
+    >
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:layout_marginLeft="-12dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/text1"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:gravity="center_vertical"
+        android:paddingRight="10dp"
+        android:textColor="@drawable/navdrawer_item_color" />
+</LinearLayout>

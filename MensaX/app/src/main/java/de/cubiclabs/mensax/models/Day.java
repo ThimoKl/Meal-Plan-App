@@ -11,7 +11,7 @@ import java.util.Locale;
 public class Day{
 
 	private static final DateFormat FORMAT_ORIGINAL = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN);
-	private static final DateFormat FORMAT_READABLE = new SimpleDateFormat("EEEE, d.MM.", Locale.GERMAN);
+	private static final DateFormat FORMAT_READABLE = new SimpleDateFormat("EEEE, d.M.", Locale.GERMAN);
 
 	public String mDatum = "";
     public List<Meal> mMeals;

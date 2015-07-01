@@ -9,6 +9,8 @@ import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.support.v4.widget.DrawerLayout;
 
+import com.google.android.gms.analytics.HitBuilders;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
@@ -69,8 +71,12 @@ public class MainActivity extends ActionBarActivity {
         mSlideShow = new FadeInSlideShow(mNavDrawerLayout);
         mSlideShow.start();
 
-        //mNavDrawerLayout.setBackgroundResource(R.drawable.background_slideshow);
-        //mBackgroundSlideshow = (TransitionDrawable) mNavDrawerLayout.getBackground();
+        ((MyApplication)getApplication()).mTracker.setScreenName(getString(R.string.app_name));
+        ((MyApplication)getApplication()).mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Screen")
+                .setAction(getString(R.string.app_name))
+                .setValue(1)
+                .build());
     }
 
     public void restoreActionBar() {

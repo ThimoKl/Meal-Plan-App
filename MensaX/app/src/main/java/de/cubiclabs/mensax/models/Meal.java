@@ -12,14 +12,12 @@ import java.util.Locale;
 public class Meal {
 
     private static final DateFormat FORMAT_ORIGINAL = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN);
-    private static final DateFormat FORMAT_READABLE = new SimpleDateFormat("EE, d.MM.", Locale.GERMAN);
+    private static final DateFormat FORMAT_READABLE = new SimpleDateFormat("EE, d.M.", Locale.GERMAN);
 
 	public String name = "";
 	public String category = "";
 	public String price = "";
     public String datum = "";
-    public int like = 0;
-    public int dislike = 0;
     public int cafeteria = 0;
     public int id = 0;
 

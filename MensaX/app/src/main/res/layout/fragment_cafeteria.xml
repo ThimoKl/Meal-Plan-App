@@ -19,8 +19,8 @@
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
             android:visibility="gone"
-            ads:adSize="SMART_BANNER"
-            ads:adUnitId="@string/ad_unit_id_inline" />
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/ad_unit_id_bottom" />
 
         <it.gmariotti.cardslib.library.view.CardListView
             android:layout_width="match_parent"

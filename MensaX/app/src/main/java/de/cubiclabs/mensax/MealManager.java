@@ -1,5 +1,7 @@
 package de.cubiclabs.mensax;
 
+import android.app.Application;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.okhttp.OkHttpClient;
@@ -57,7 +59,7 @@ public class MealManager {
     }
 
     @Background
-    public void request(int cafeteriaId, String cafeteriaRatingUid) {
+    public void request(int cafeteriaId, String cafeteriaRatingUid, Application app) {
         mLastRequestedCafeteriaId = cafeteriaId;
 
         // Use cache first, but download anyways
@@ -70,11 +72,11 @@ public class MealManager {
             cache = null;
         }
 
-        download(cafeteriaId, cafeteriaRatingUid, cache);
+        download(cafeteriaId, cafeteriaRatingUid, cache, app);
     }
 
     @Background
-    protected void download(int cafeteriaId, String cafeteriaRatingUid, List<Day> cache) {
+    protected void download(int cafeteriaId, String cafeteriaRatingUid, List<Day> cache, Application app) {
         List<Day> days= new ArrayList<Day>();
         String xml = "";
         try {
@@ -93,7 +95,7 @@ public class MealManager {
             }
 
             // Parse
-            CafeteriaDOMParser parser = new CafeteriaDOMParser();
+            CafeteriaDOMParser parser = new CafeteriaDOMParser(app, cafeteriaId);
             days = parser.parse(response.body().byteStream());
 
             //Type listType = new TypeToken<ArrayList<Meal>>() {}.getType();

@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NavigationDrawerFragment" >
+    tools:context=".NavigationDrawerFragment"
+    android:background="@color/white_transparent" >
 
     <LinearLayout
         android:id="@+id/mErrorWrapper"
@@ -41,8 +42,8 @@
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp"
-        android:background="@color/white_transparent"
-        android:paddingTop="?attr/actionBarSize" />
+        android:paddingTop="?attr/actionBarSize"
+        android:background="@android:color/transparent" />
 
 </LinearLayout>
 

@@ -93,11 +93,6 @@ public class NavigationDrawerFragment extends Fragment {
         changeViewState(ViewState.SUCCESS);
         mCafeterias = event.mCafeterias;
 
-        if(getActivity() != null) {
-            Cafeteria rateMeObject = new Cafeteria();
-            rateMeObject.name = getActivity().getString(R.string.rate_app);
-            mCafeterias.add(rateMeObject);
-        }
         initListView();
     }
 
@@ -129,8 +124,14 @@ public class NavigationDrawerFragment extends Fragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(position == mCafeterias.size()-1) {
+                if(position == mCafeterias.size()) {
                     launchMarket();
+                    // "Rate app" shall not be the active item. Use the current cafeteria
+                    if (mListView != null) {
+                        mListView.setItemChecked(mCurrentSelectedPosition, true);
+                    }
+                } else if(position == mCafeterias.size() + 1) {
+                    reportIssue();
                     // "Rate app" shall not be the active item. Use the current cafeteria
                     if (mListView != null) {
                         mListView.setItemChecked(mCurrentSelectedPosition, true);
@@ -146,11 +147,10 @@ public class NavigationDrawerFragment extends Fragment {
             cafTitles[i] = mCafeterias.get(i).name;
         }
 
-        mListView.setAdapter(new ArrayAdapter<String>(
+        mListView.setAdapter(new NavigationDrawerAdapter(
                 getActionBar().getThemedContext(),
                 R.layout.navdrawer_list_item,
-                R.id.text1,
-                cafTitles));
+                mCafeterias));
         mListView.setItemChecked(mCurrentSelectedPosition, true);
         EventBus.getDefault().post(new Events.CafeteriaSelected(mCafeterias.get(mCurrentSelectedPosition)));
     }
@@ -289,6 +289,16 @@ public class NavigationDrawerFragment extends Fragment {
         } catch (ActivityNotFoundException e) {
             Toast.makeText(getActivity(), getActivity().getString(R.string.error_open_play_store), Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void reportIssue() {
+        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto","mensaspeiseplan@gmail.com", null));
+        intent.putExtra(Intent.EXTRA_EMAIL, "");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Problem: " + getString(R.string.app_name));
+        intent.putExtra(Intent.EXTRA_TEXT, "");
+
+        startActivity(Intent.createChooser(intent, getString(R.string.report_issue)));
     }
 
 }

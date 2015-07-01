@@ -15,8 +15,10 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
+import com.google.android.gms.analytics.HitBuilders;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.App;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
@@ -64,6 +66,8 @@ public class CafeteriaFragment extends Fragment {
     @ViewById
     protected ViewGroup mContentWrapper;
 
+    MyApplication mApplication;
+
     private List<Meal> mMeals;
 
     private enum ViewState {
@@ -73,6 +77,7 @@ public class CafeteriaFragment extends Fragment {
     @AfterViews
     protected void afterViewsInjected() {
         EventBus.getDefault().register(this);
+        mApplication = (MyApplication)getActivity().getApplication();
         load();
     }
 
@@ -83,7 +88,7 @@ public class CafeteriaFragment extends Fragment {
 
     private void load() {
         changeViewState(ViewState.LOADING);
-        mMealManager.request(mCafeteriaId, mCafeteriaRatingUid);
+        mMealManager.request(mCafeteriaId, mCafeteriaRatingUid, mApplication);
     }
 
     public void onEventMainThread(Events.MealDownloadFailedEvent event) {
@@ -125,9 +130,23 @@ public class CafeteriaFragment extends Fragment {
             @Override
             public void onAdLoaded() {
                 adView.setVisibility(View.VISIBLE);
+                mApplication.mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Ads")
+                        .setAction(getString(R.string.app_name))
+                        .setLabel("filled")
+                        .setValue(1)
+                        .build());
                 super.onAdLoaded();
             }
         });
+
+        mApplication.mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Ads")
+                .setAction(getString(R.string.app_name))
+                .setLabel("requested")
+                .setValue(1)
+                .build());
+
         super.onResume();
     }
 
@@ -226,18 +245,43 @@ public class CafeteriaFragment extends Fragment {
                 if (title != null)
                     title.setText(section.getTitle());
 
-                final PublisherAdView adView = (PublisherAdView) view.findViewById(R.id.adView);
+
+                ViewGroup adWrapper = (ViewGroup)view.findViewById(R.id.adWrapper);
+                if(adWrapper.getChildCount() > 0) {
+                    adWrapper.removeAllViews();
+                }
+
+                final PublisherAdView adView = new PublisherAdView(getActivity());//(PublisherAdView) view.findViewById(R.id.adView);
                 PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
-                //adView.setAdSizes(AdSize.MEDIUM_RECTANGLE, AdSize.BANNER, AdSize.FULL_BANNER, AdSize.LARGE_BANNER, AdSize.LEADERBOARD);
-                adView.loadAd(adRequest);
+                adView.setAdUnitId(getString(R.string.ad_unit_id_inline));
+                adView.setAdSizes(AdSize.MEDIUM_RECTANGLE, AdSize.BANNER, AdSize.FULL_BANNER, AdSize.LARGE_BANNER, AdSize.LEADERBOARD);
                 adView.setVisibility(View.GONE);
+
+                adWrapper.addView(adView);
+                adView.loadAd(adRequest);
+
                 adView.setAdListener(new AdListener() {
                     @Override
                     public void onAdLoaded() {
                         adView.setVisibility(View.VISIBLE);
+
+                        mApplication.mTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("Ads")
+                                .setAction(getString(R.string.app_name))
+                                .setLabel("filled")
+                                .setValue(1)
+                                .build());
+
                         super.onAdLoaded();
                     }
                 });
+
+                mApplication.mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Ads")
+                        .setAction(getString(R.string.app_name))
+                        .setLabel("requested")
+                        .setValue(1)
+                        .build());
 
             }
 

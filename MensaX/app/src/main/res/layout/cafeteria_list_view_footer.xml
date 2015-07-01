@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_gravity="center_horizontal"
+    android:paddingBottom="4dp"
     >
 
     <TextView
@@ -12,7 +13,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:gravity="center_horizontal"
         android:text="@string/source_title"
-        android:textColor="@color/white"/>
+        android:textColor="@color/black"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,6 +21,6 @@
         android:gravity="center_horizontal"
         android:autoLink="web"
         android:text="@string/source"
-        android:textColor="@color/white"
-        android:textColorLink="@color/white"/>
+        android:textColor="@color/red"
+        android:textColorLink="@color/red"/>
 </LinearLayout>
