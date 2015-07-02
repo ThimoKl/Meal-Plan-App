@@ -24,6 +24,7 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import java.util.List;
 import de.cubiclabs.mensax.models.Day;
 import de.cubiclabs.mensax.models.Meal;
 import de.cubiclabs.mensax.util.Events;
+import de.cubiclabs.mensax.util.Preferences_;
 import de.cubiclabs.mensax.views.EmptyCard;
 import de.cubiclabs.mensax.views.MealCard;
 import de.greenrobot.event.EventBus;
@@ -66,7 +68,12 @@ public class CafeteriaFragment extends Fragment {
     @ViewById
     protected ViewGroup mContentWrapper;
 
+    @Pref
+    protected Preferences_ mPreferences;
+
     MyApplication mApplication;
+
+    protected boolean mShowAds;
 
     private List<Meal> mMeals;
 
@@ -122,6 +129,17 @@ public class CafeteriaFragment extends Fragment {
 
     @Override
     public void onResume() {
+
+        int appOpenedCounter = mPreferences.appOpenedCounter().get();
+        appOpenedCounter++;
+        if(appOpenedCounter <= 4) {
+            mShowAds = false;
+            mPreferences.edit().appOpenedCounter().put(appOpenedCounter).apply();
+            super.onResume();
+            return;
+        }
+        mShowAds = true;
+
         final AdView adView = (AdView) getView().findViewById(R.id.adView);
         adView.setVisibility(View.GONE);
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -250,45 +268,48 @@ public class CafeteriaFragment extends Fragment {
                     title.setText(section.getTitle());
 
 
-                ViewGroup adWrapper = (ViewGroup)view.findViewById(R.id.adWrapper);
-                if(adWrapper.getChildCount() > 0) {
-                    adWrapper.removeAllViews();
-                }
+                if(mShowAds) {
 
-                final PublisherAdView adView = new PublisherAdView(getActivity());//(PublisherAdView) view.findViewById(R.id.adView);
-                PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
-                adView.setAdUnitId(getString(R.string.ad_unit_id_inline));
-                adView.setAdSizes(AdSize.MEDIUM_RECTANGLE, AdSize.BANNER, AdSize.FULL_BANNER, AdSize.LARGE_BANNER, AdSize.LEADERBOARD);
-                adView.setVisibility(View.GONE);
-
-                adWrapper.addView(adView);
-                adView.loadAd(adRequest);
-
-                adView.setAdListener(new AdListener() {
-                    @Override
-                    public void onAdLoaded() {
-                        try {
-                            adView.setVisibility(View.VISIBLE);
-
-                            mApplication.mTracker.send(new HitBuilders.EventBuilder()
-                                    .setCategory("Ads")
-                                    .setAction(getString(R.string.app_name))
-                                    .setLabel("filled")
-                                    .setValue(1)
-                                    .build());
-                        } catch(Exception e) {
-
-                        }
-                        super.onAdLoaded();
+                    ViewGroup adWrapper = (ViewGroup) view.findViewById(R.id.adWrapper);
+                    if (adWrapper.getChildCount() > 0) {
+                        adWrapper.removeAllViews();
                     }
-                });
 
-                mApplication.mTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Ads")
-                        .setAction(getString(R.string.app_name))
-                        .setLabel("requested")
-                        .setValue(1)
-                        .build());
+                    final PublisherAdView adView = new PublisherAdView(getActivity());//(PublisherAdView) view.findViewById(R.id.adView);
+                    PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
+                    adView.setAdUnitId(getString(R.string.ad_unit_id_inline));
+                    adView.setAdSizes(AdSize.MEDIUM_RECTANGLE, AdSize.BANNER, AdSize.FULL_BANNER, AdSize.LARGE_BANNER, AdSize.LEADERBOARD);
+                    adView.setVisibility(View.GONE);
+
+                    adWrapper.addView(adView);
+                    adView.loadAd(adRequest);
+
+                    adView.setAdListener(new AdListener() {
+                        @Override
+                        public void onAdLoaded() {
+                            try {
+                                adView.setVisibility(View.VISIBLE);
+
+                                mApplication.mTracker.send(new HitBuilders.EventBuilder()
+                                        .setCategory("Ads")
+                                        .setAction(getString(R.string.app_name))
+                                        .setLabel("filled")
+                                        .setValue(1)
+                                        .build());
+                            } catch (Exception e) {
+
+                            }
+                            super.onAdLoaded();
+                        }
+                    });
+
+                    mApplication.mTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Ads")
+                            .setAction(getString(R.string.app_name))
+                            .setLabel("requested")
+                            .setValue(1)
+                            .build());
+                }
 
             }
 

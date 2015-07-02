@@ -35,18 +35,12 @@ import de.cubiclabs.mensax.util.Events;
 import de.cubiclabs.mensax.util.Preferences_;
 import de.greenrobot.event.EventBus;
 
-/**
- * Fragment used for managing interactions for and presentation of a navigation drawer.
- * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
- * design guidelines</a> for a complete explanation of the behaviors implemented here.
- */
 @EFragment(R.layout.fragment_navigation_drawer)
 public class NavigationDrawerFragment extends Fragment {
 
     private ActionBarDrawerToggle mDrawerToggle;
 
     private DrawerLayout mDrawerLayout;
-    //private ListView mDrawerListView;
     private View mFragmentContainerView;
 
     @InstanceState
@@ -56,7 +50,7 @@ public class NavigationDrawerFragment extends Fragment {
     protected Preferences_ mPreferences;
 
     @InstanceState
-    protected int mCurrentSelectedPosition = 0;
+    protected int mCurrentSelectedPosition = -1;
 
     @Bean
     protected CafeteriaManager mCafeteriaManager;
@@ -121,6 +115,13 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     private void initListView() {
+        if(mCurrentSelectedPosition == -1) {
+            mCurrentSelectedPosition = mPreferences.currentCafeteria().get();
+        }
+        if(mCurrentSelectedPosition >= mCafeterias.size() || mCurrentSelectedPosition < 0) {
+            mCurrentSelectedPosition = 0;
+        }
+
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -141,11 +142,6 @@ public class NavigationDrawerFragment extends Fragment {
                 }
             }
         });
-
-        String[] cafTitles = new String[mCafeterias.size()];
-        for(int i=0; i<mCafeterias.size(); i++) {
-            cafTitles[i] = mCafeterias.get(i).name;
-        }
 
         mListView.setAdapter(new NavigationDrawerAdapter(
                 getActionBar().getThemedContext(),
@@ -232,6 +228,12 @@ public class NavigationDrawerFragment extends Fragment {
 
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
+
+        mPreferences.edit()
+                .currentCafeteria()
+                .put(position)
+                .apply();
+
         if (mListView != null) {
             mListView.setItemChecked(position, true);
         }
