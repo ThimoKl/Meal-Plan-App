@@ -19,7 +19,8 @@ public class UrlProvider {
     Context mContext;
 
     public String getCafeteriaListUrl() {
-        return BASE_URL + mContext.getResources().getString(R.string.url_city) + "/cafeterias.json";
+        //return BASE_URL + mContext.getResources().getString(R.string.url_city) + "/cafeterias.json";
+        return BASE_URL + "cafeterias.php?app=" + mContext.getResources().getString(R.string.url_city);
     }
 
     public String getMealsUrl(int cafeteriaId) {

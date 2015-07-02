@@ -36,6 +36,10 @@ public class RatingManager {
     @Background
     public void getRatings(int cafeteriaId, String cafeteriaRatingUid, List<Day> days) {
         RatedMeal.removeOldDbEntries();
+        if(cafeteriaRatingUid.equals("0")) {
+            EventBus.getDefault().post(new Events.RatingsDownloadFailedEvent(cafeteriaId));
+            return;
+        }
 
         String requestUrl = "http://api.meinemensa.esined.net/json/ratings/get/" + cafeteriaRatingUid;
         List<Rating> ratings = new ArrayList<Rating>();

@@ -1,7 +1,7 @@
 <resources>
     <!-- START CONFIG -->
     <string name="app_name">Mensa Bonn</string>
-    <string name="url_city">bonn</string>
+    <string name="url_city">duesseldorf</string>
     <string name="source">www.studentenwerk-bonn.de</string>
     <string name="ad_unit_id_inline">/14148428/ca-pub-3723428902598385/Phone_Android_Bonn_X</string>
     <string name="ad_unit_id_bottom">/14148428/ca-pub-3723428902598385/Phone_Android_Bonn</string>
