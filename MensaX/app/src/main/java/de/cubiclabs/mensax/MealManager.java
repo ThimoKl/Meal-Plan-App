@@ -160,6 +160,7 @@ public class MealManager {
                     Gson gson = new Gson();
                     days = (ArrayList<Day>)gson.fromJson(json, listType);
                 } catch(Exception e) {
+                    e.printStackTrace();
                 }
                 break;
             }
@@ -192,11 +193,15 @@ public class MealManager {
         }
 
         // Add new entry
-        Gson gson = new Gson();
-        Type listType = new TypeToken<ArrayList<Day>>() {}.getType();
-        String json = gson.toJson(days, listType);
-        mealDateCache.add(cafeteriaId + "=" + String.valueOf((new Date()).getTime()));
-        mealJsonCache.add(cafeteriaId + "=" + json);
+        try {
+            Gson gson = new Gson();
+            Type listType = new TypeToken<ArrayList<Day>>() {}.getType();
+            String json = gson.toJson(days, listType);
+            mealDateCache.add(cafeteriaId + "=" + String.valueOf((new Date()).getTime()));
+            mealJsonCache.add(cafeteriaId + "=" + json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         mPreferences.edit()
                 .mealDateCache()

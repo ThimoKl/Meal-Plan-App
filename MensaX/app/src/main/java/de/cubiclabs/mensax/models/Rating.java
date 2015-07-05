@@ -10,7 +10,7 @@ public class Rating {
     public String rating = "0";
     public String stars = "0";
 
-    public RatedMeal mMyRateInformation = null;
+    public transient RatedMeal mMyRateInformation = null;
 
     public void addToCount(int number) {
         try {

@@ -29,11 +29,11 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "cafeteria.multiple.duesseldorf"
+        applicationId "cafeteria.single.gera"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 411
-        versionName "4.1.1"
+        versionCode 420
+        versionName "4.20"
     }
     buildTypes {
         release {

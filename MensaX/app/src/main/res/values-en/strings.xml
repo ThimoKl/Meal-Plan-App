@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_open_play_store">Failed to open the Play Store</string>
+    <string name="my_rating">My rating</string>
+    <string name="navigation_drawer_close">Close navigation</string>
+    <string name="navigation_drawer_open">Open navigation</string>
+    <string name="no_meals_today">Sorry, there are no meals available for today.</string>
+    <string name="rate">Rate</string>
+    <string name="rate_app">Rate app</string>
+    <string name="report_issue">Report issues</string>
+    <string name="source_title">Data source:</string>
+</resources>

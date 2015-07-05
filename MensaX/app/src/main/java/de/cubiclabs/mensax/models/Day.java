@@ -11,10 +11,10 @@ import java.util.Locale;
 public class Day{
 
 	private static final DateFormat FORMAT_ORIGINAL = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN);
-	private static final DateFormat FORMAT_READABLE = new SimpleDateFormat("EEEE, d.M.", Locale.GERMAN);
+	private static final DateFormat FORMAT_READABLE = new SimpleDateFormat("EEEE, d.M.", Locale.getDefault());
 
 	public String mDatum = "";
-    public List<Meal> mMeals;
+    public ArrayList<Meal> mMeals;
 
 	public Day() {
         mMeals = new ArrayList<Meal>();

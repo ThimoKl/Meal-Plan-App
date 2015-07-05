@@ -67,9 +67,14 @@ public class RatingManager {
                 return;
             }
 
-            Type listType = new TypeToken<RatingsWrapper>() {}.getType();
-            Gson gson = new Gson();
-            RatingsWrapper wrapper = (RatingsWrapper)gson.fromJson(response.body().string(), listType);
+            RatingsWrapper wrapper = null;
+            try {
+                Type listType = new TypeToken<RatingsWrapper>() {}.getType();
+                Gson gson = new Gson();
+                wrapper = (RatingsWrapper)gson.fromJson(response.body().string(), listType);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             if(wrapper == null || wrapper.rating == null || wrapper.rating.size() != amountOfMeals) {
                 throw new Exception("Response ratings don't match the expected results");

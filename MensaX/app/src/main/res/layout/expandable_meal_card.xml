@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Meine Bewertung"
+        android:text="@string/my_rating"
         android:id="@+id/txtMyRating"
         android:layout_gravity="center_horizontal"
         android:textColor="@color/grey"
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:background="@color/red"
             android:textColor="@color/white"
-            android:text="Bewerten"/>
+            android:text="@string/rate"/>
     </LinearLayout>
 
 

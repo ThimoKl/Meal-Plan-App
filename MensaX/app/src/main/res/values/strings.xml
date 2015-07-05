@@ -1,11 +1,11 @@
 <resources>
     <!-- START CONFIG -->
-    <string name="app_name">Mensa Düsseldorf</string>
-    <string name="url_city">duesseldorf</string>
-    <string name="app_parameter">duesseldorf</string>
-    <string name="source">www.studentenwerk-duesseldorf.de</string>
-    <string name="ad_unit_id_inline">/14148428/ca-pub-3723428902598385/Phone_Android_3Duesseldorf_X</string>
-    <string name="ad_unit_id_bottom">/14148428/ca-pub-3723428902598385/Phone_Android_3Duesseldorf</string>
+    <string name="app_name" translatable="false">Mensa Gera</string>
+    <string name="url_city" translatable="false">thueringen</string>
+    <string name="app_parameter" translatable="false">gera</string>
+    <string name="source" translatable="false">www.stw-thueringen.de</string>
+    <string name="ad_unit_id_inline" translatable="false">/14148428/ca-pub-3723428902598385/Phone_Android_2Gera_X</string>
+    <string name="ad_unit_id_bottom" translatable="false">/14148428/ca-pub-3723428902598385/Phone_Android_2Gera</string>
 
     <!-- DON'T FORGET TO UPDATE THE PACKAGE NAME IN BUILD.GRADLE -->
 
@@ -19,5 +19,8 @@
     <string name="source_title">Datenquelle:</string>
     <string name="rate_app">App bewerten</string>
     <string name="report_issue">Probleme melden</string>
+    <string name="my_rating">Meine Bewertung</string>
+    <string name="rate">Bewerten</string>
+
 
 </resources>
