@@ -28,6 +28,10 @@
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="21087d27ab70d9c834263e1c487a5fffb8f1fbdb" />
+
         <activity
             android:name=".MainActivity_"
             android:label="@string/app_name"

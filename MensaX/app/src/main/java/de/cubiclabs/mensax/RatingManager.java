@@ -14,9 +14,7 @@ import org.androidannotations.api.rest.MediaType;
 import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.cubiclabs.mensax.database.RatedMeal;
 import de.cubiclabs.mensax.models.Day;

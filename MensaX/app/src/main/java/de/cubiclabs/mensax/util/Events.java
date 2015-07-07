@@ -1,12 +1,9 @@
 package de.cubiclabs.mensax.util;
 
 import java.util.List;
-import java.util.Map;
 
 import de.cubiclabs.mensax.models.Cafeteria;
 import de.cubiclabs.mensax.models.Day;
-import de.cubiclabs.mensax.models.Meal;
-import de.cubiclabs.mensax.models.Rating;
 
 /**
  * Created by thimokluser on 6/2/15.

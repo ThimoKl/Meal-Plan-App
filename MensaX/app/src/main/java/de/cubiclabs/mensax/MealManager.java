@@ -16,6 +16,7 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -171,8 +172,8 @@ public class MealManager {
 
     private void updateCache(int cafeteriaId, List<Day> days) {
         // Remove possible old entry
-        Set<String> mealDateCache = mPreferences.mealDateCache().get();
-        Set<String> mealJsonCache = mPreferences.mealJsonCache().get();
+        Set<String> mealDateCache = Collections.synchronizedSet(mPreferences.mealDateCache().get());
+        Set<String> mealJsonCache = Collections.synchronizedSet(mPreferences.mealJsonCache().get());
 
         Iterator<String> iterator = mealDateCache.iterator();
         while(iterator.hasNext()) {
