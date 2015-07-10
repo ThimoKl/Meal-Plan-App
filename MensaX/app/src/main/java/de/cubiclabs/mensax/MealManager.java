@@ -18,6 +18,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -99,9 +100,6 @@ public class MealManager {
             CafeteriaDOMParser parser = new CafeteriaDOMParser(app, cafeteriaId);
             days = parser.parse(response.body().byteStream());
 
-            //Type listType = new TypeToken<ArrayList<Meal>>() {}.getType();
-            //Gson gson = new Gson();
-            //meals = (ArrayList<Meal>)gson.fromJson(json, listType);
         } catch (Exception e) {
             if(cache == null) {
                 EventBus.getDefault().post(new Events.MealDownloadFailedEvent(cafeteriaId));
@@ -170,26 +168,25 @@ public class MealManager {
         return days;
     }
 
-    private void updateCache(int cafeteriaId, List<Day> days) {
+    private synchronized void updateCache(int cafeteriaId, List<Day> days) {
         // Remove possible old entry
-        Set<String> mealDateCache = Collections.synchronizedSet(mPreferences.mealDateCache().get());
-        Set<String> mealJsonCache = Collections.synchronizedSet(mPreferences.mealJsonCache().get());
+        Set<String> mealDateCache = mPreferences.mealDateCache().get();
+        Set<String> mealJsonCache = mPreferences.mealJsonCache().get();
 
-        Iterator<String> iterator = mealDateCache.iterator();
-        while(iterator.hasNext()) {
-            String entry = iterator.next();
-            if(entry.startsWith(cafeteriaId + "=")) {
-                iterator.remove();
-                break;
+        Set<String> newMealDateCache = new HashSet<String>();
+        Set<String> newMealJsonCache = new HashSet<String>();
+
+        // Iterating through the set and removing the current cafeteria somehow creates an exception
+        // So I'm just add all entries that are not the current one
+        for(String entry : mealDateCache) {
+            if(!entry.startsWith(cafeteriaId + "=")) {
+                newMealDateCache.add(entry);
             }
         }
 
-        iterator = mealJsonCache.iterator();
-        while(iterator.hasNext()) {
-            String entry = iterator.next();
-            if(entry.startsWith(cafeteriaId + "=")) {
-                iterator.remove();
-                break;
+        for(String entry : mealJsonCache) {
+            if(!entry.startsWith(cafeteriaId + "=")) {
+                newMealJsonCache.add(entry);
             }
         }
 
@@ -198,17 +195,17 @@ public class MealManager {
             Gson gson = new Gson();
             Type listType = new TypeToken<ArrayList<Day>>() {}.getType();
             String json = gson.toJson(days, listType);
-            mealDateCache.add(cafeteriaId + "=" + String.valueOf((new Date()).getTime()));
-            mealJsonCache.add(cafeteriaId + "=" + json);
+            newMealDateCache.add(cafeteriaId + "=" + String.valueOf((new Date()).getTime()));
+            newMealJsonCache.add(cafeteriaId + "=" + json);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         mPreferences.edit()
                 .mealDateCache()
-                .put(mealDateCache)
+                .put(newMealDateCache)
                 .mealJsonCache()
-                .put(mealJsonCache)
+                .put(newMealJsonCache)
                 .apply();
 
     }

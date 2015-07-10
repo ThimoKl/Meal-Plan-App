@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import de.cubiclabs.mensax.models.AppInfo;
 import de.cubiclabs.mensax.models.Cafeteria;
 import de.cubiclabs.mensax.util.Events;
 import de.cubiclabs.mensax.util.UrlProvider;
@@ -63,8 +64,9 @@ public class CafeteriaManager {
         List<Cafeteria> list = fromCache();
         if(list != null && list.size() == 0) return false;
 
+        String appUnitIdBottom = mPreferences.adUnitIdBottom().get();
         long timestamp  = mPreferences.timestampLastCafeteriaUpdate().get();
-        if((new Date()).getTime() - timestamp > CACHE_EXPIRATION) {
+        if((new Date()).getTime() - timestamp > CACHE_EXPIRATION || appUnitIdBottom.length() == 0) {
             return false;
         }
 
@@ -87,9 +89,13 @@ public class CafeteriaManager {
 
             json = response.body().string();
 
-            Type listType = new TypeToken<ArrayList<Cafeteria>>() {}.getType();
             Gson gson = new Gson();
-            cafeterias = (ArrayList<Cafeteria>)gson.fromJson(json, listType);
+            AppInfo app = (AppInfo)gson.fromJson(json, AppInfo.class);
+            cafeterias = app.list;
+
+            mPreferences.adUnitIdInline().put(app.adUnitIdInline);
+            mPreferences.adUnitIdBottom().put(app.adUnitIdBottom);
+            mPreferences.source().put(app.source);
         } catch (Exception e) {
             e.printStackTrace();
             // Download failed. Use cache, even if it's expired.
@@ -119,9 +125,9 @@ public class CafeteriaManager {
         List<Cafeteria> list = new ArrayList<Cafeteria>();
         String json = mPreferences.cafeteriasJson().get();
         try {
-            Type listType = new TypeToken<ArrayList<Cafeteria>>() {}.getType();
             Gson gson = new Gson();
-            list = (ArrayList<Cafeteria>)gson.fromJson(json, listType);
+            AppInfo app = (AppInfo)gson.fromJson(json, AppInfo.class);
+            list = app.list;
         } catch(Exception e) {
             e.printStackTrace();
         }

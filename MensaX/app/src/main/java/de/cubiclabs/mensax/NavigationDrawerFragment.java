@@ -52,8 +52,8 @@ public class NavigationDrawerFragment extends Fragment {
     @InstanceState
     protected int mCurrentSelectedPosition = -1;
 
-    @Bean
-    protected CafeteriaManager mCafeteriaManager;
+    //@Bean
+    //protected CafeteriaManager mCafeteriaManager;
 
     protected List<Cafeteria> mCafeterias;
 
@@ -79,7 +79,7 @@ public class NavigationDrawerFragment extends Fragment {
     @AfterViews
     void afterViewsInjected() {
         EventBus.getDefault().register(this);
-        mCafeteriaManager.request();
+        //mCafeteriaManager.request();
         changeViewState(ViewState.LOADING);
     }
 

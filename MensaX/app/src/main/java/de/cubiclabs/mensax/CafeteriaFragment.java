@@ -140,9 +140,27 @@ public class CafeteriaFragment extends Fragment {
         }
         mShowAds = true;
 
+        ViewGroup adWrapper = (ViewGroup) getView().findViewById(R.id.adWrapper);
+        if (adWrapper.getChildCount() > 0) {
+            adWrapper.removeAllViews();
+        }
+
+        final PublisherAdView adView = new PublisherAdView(getActivity());//(PublisherAdView) view.findViewById(R.id.adView);
+        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
+        adView.setAdUnitId(mPreferences.adUnitIdBottom().get());
+        //adView.setAdUnitId(getString(R.string.ad_unit_id_inline));
+        adView.setAdSizes(AdSize.MEDIUM_RECTANGLE, AdSize.BANNER, AdSize.FULL_BANNER, AdSize.LARGE_BANNER, AdSize.LEADERBOARD);
+        adView.setVisibility(View.GONE);
+
+        adWrapper.addView(adView);
+
+
+
+
+        /*
         final AdView adView = (AdView) getView().findViewById(R.id.adView);
         adView.setVisibility(View.GONE);
-        AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder().build();*/
         adView.loadAd(adRequest);
         adView.setAdListener(new AdListener() {
             @Override
@@ -155,7 +173,7 @@ public class CafeteriaFragment extends Fragment {
                             .setLabel("filled")
                             .setValue(1)
                             .build());
-                } catch(Exception e) {
+                } catch (Exception e) {
 
                 }
                 super.onAdLoaded();
@@ -239,6 +257,9 @@ public class CafeteriaFragment extends Fragment {
 
             if(listView.getFooterViewsCount() == 0) {
                 View footerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.cafeteria_list_view_footer, null, false);
+                TextView txtSource = (TextView)footerView.findViewById(R.id.source);
+                String source = mPreferences.source().get();
+                txtSource.setText(source);
                 listView.addFooterView(footerView);
             }
         }
@@ -277,7 +298,8 @@ public class CafeteriaFragment extends Fragment {
 
                     final PublisherAdView adView = new PublisherAdView(getActivity());//(PublisherAdView) view.findViewById(R.id.adView);
                     PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
-                    adView.setAdUnitId(getString(R.string.ad_unit_id_inline));
+                    adView.setAdUnitId(mPreferences.adUnitIdInline().get());
+                    //adView.setAdUnitId(getString(R.string.ad_unit_id_inline));
                     adView.setAdSizes(AdSize.MEDIUM_RECTANGLE, AdSize.BANNER, AdSize.FULL_BANNER, AdSize.LARGE_BANNER, AdSize.LEADERBOARD);
                     adView.setVisibility(View.GONE);
 

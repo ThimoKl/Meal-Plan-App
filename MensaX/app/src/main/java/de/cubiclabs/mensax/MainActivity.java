@@ -25,8 +25,8 @@ import de.greenrobot.event.EventBus;
 @EActivity(R.layout.activity_main)
 public class MainActivity extends ActionBarActivity {
 
-    @Bean
-    protected CafeteriaManager mCafeteriaManager;
+    //@Bean
+    //protected CafeteriaManager mCafeteriaManager;
 
     @FragmentById(R.id.navigation_drawer)
     protected NavigationDrawerFragment mNavigationDrawerFragment;

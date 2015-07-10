@@ -36,8 +36,8 @@ android {
         applicationId "com.exercise.MensaSpeiseplanStuttgart"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 422
-        versionName "4.2.2"
+        versionCode 430
+        versionName "4.3.0"
     }
     buildTypes {
         release {

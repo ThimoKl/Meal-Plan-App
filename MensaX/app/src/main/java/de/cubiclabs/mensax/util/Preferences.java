@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * Created by thimokluser on 5/10/15.
  */
-@SharedPref
+@SharedPref(value=SharedPref.Scope.UNIQUE)
 public interface Preferences {
 
     @DefaultBoolean(false)
@@ -28,6 +28,15 @@ public interface Preferences {
 
     @DefaultString("")
     String cafeteriasJson();
+
+    @DefaultString("")
+    String source();
+
+    @DefaultString("")
+    String adUnitIdBottom();
+
+    @DefaultString("")
+    String adUnitIdInline();
 
     Set<String> mealJsonCache();
     Set<String> mealDateCache();

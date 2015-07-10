@@ -3,9 +3,6 @@
     <string name="app_name" translatable="false">Mensa Stuttgart</string>
     <string name="url_city" translatable="false">stuttgart</string>
     <string name="app_parameter" translatable="false">stuttgart</string>
-    <string name="source" translatable="false">www.studierendenwerk-stuttgart.de</string>
-    <string name="ad_unit_id_inline" translatable="false">/14148428/ca-pub-3723428902598385/Phone_Android_Stuttgart_X</string>
-    <string name="ad_unit_id_bottom" translatable="false">/14148428/ca-pub-3723428902598385/Phone_Android_Stuttgart</string>
 
     <!-- DON'T FORGET TO UPDATE THE PACKAGE NAME IN BUILD.GRADLE -->
 

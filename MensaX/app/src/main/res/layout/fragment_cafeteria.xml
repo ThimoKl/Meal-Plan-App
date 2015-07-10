@@ -12,7 +12,18 @@
         android:layout_height="match_parent"
         android:visibility="gone">
 
-        <com.google.android.gms.ads.AdView
+
+        <LinearLayout
+            android:id="@+id/adWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            >
+
+        </LinearLayout>
+        <!--com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -20,14 +31,14 @@
             android:layout_alignParentBottom="true"
             android:visibility="gone"
             ads:adSize="BANNER"
-            ads:adUnitId="@string/ad_unit_id_bottom" />
+            ads:adUnitId="@string/ad_unit_id_bottom" /-->
 
         <it.gmariotti.cardslib.library.view.CardListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_above="@id/adView"
+            android:layout_above="@id/adWrapper"
             style="@style/native_list_external"
             card:list_card_layout_resourceID="@layout/my_list_card_layout"
             android:id="@+id/carddemo_list_expand"/>

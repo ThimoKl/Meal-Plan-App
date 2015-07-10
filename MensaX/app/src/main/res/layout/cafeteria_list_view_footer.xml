@@ -15,12 +15,12 @@
         android:text="@string/source_title"
         android:textColor="@color/black"/>
     <TextView
+        android:id="@+id/source"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:gravity="center_horizontal"
         android:autoLink="web"
-        android:text="@string/source"
         android:textColor="@color/red"
         android:textColorLink="@color/red"/>
 </LinearLayout>

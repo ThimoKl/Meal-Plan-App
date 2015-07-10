@@ -20,7 +20,7 @@ public class UrlProvider {
 
     public String getCafeteriaListUrl() {
         //return BASE_URL + mContext.getResources().getString(R.string.url_city) + "/cafeterias.json";
-        return BASE_URL + "cafeterias.php?app=" + mContext.getResources().getString(R.string.app_parameter);
+        return BASE_URL + "cafeterias-2.php?app=" + mContext.getResources().getString(R.string.app_parameter);
     }
 
     public String getMealsUrl(int cafeteriaId) {
