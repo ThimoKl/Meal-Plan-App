@@ -1,8 +1,8 @@
 <resources>
     <!-- START CONFIG -->
-    <string name="app_name" translatable="false">Mensa Stuttgart</string>
-    <string name="url_city" translatable="false">stuttgart</string>
-    <string name="app_parameter" translatable="false">stuttgart</string>
+    <string name="app_name" translatable="false">Mensa Freiburg</string>
+    <string name="url_city" translatable="false">freiburg2</string>
+    <string name="app_parameter" translatable="false">freiburg</string>
 
     <!-- DON'T FORGET TO UPDATE THE PACKAGE NAME IN BUILD.GRADLE -->
 

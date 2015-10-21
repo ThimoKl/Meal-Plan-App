@@ -47,7 +47,7 @@ public class MealManager {
 
     private final OkHttpClient mClient = new OkHttpClient();
 
-    private static final long CACHE_EXPIRATION = 1 * 24 * 60 * 60 * 1000;
+    private static final long CACHE_EXPIRATION = 7 * 24 * 60 * 60 * 1000;
 
     private int mLastRequestedCafeteriaId = 0;
 

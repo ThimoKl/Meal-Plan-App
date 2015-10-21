@@ -33,11 +33,11 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "com.exercise.MensaSpeiseplanStuttgart"
+        applicationId "cafeteria.multiple.freiburg"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 430
-        versionName "4.3.0"
+        versionCode 431
+        versionName "4.3.1"
     }
     buildTypes {
         release {
